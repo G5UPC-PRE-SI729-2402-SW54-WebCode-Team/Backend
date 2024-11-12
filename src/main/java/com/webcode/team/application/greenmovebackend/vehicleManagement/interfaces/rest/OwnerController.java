@@ -1,5 +1,6 @@
 package com.webcode.team.application.greenmovebackend.vehicleManagement.interfaces.rest;
 
+import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.commands.DeleteOwnerCommand;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.queries.GetOwnerByIdQuery;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.services.OwnerCommandService;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.services.OwnerQueryService;
@@ -48,5 +49,12 @@ public class OwnerController {
         var ownerResource = OwnerResourceFromEntityAssembler.toResourceFromEntity(owner.get());
 
         return ResponseEntity.ok(ownerResource);
+    }
+    @DeleteMapping("/{ownerId}")
+    @Operation(summary = "Delete owner by id", description = "Delete owner by id")
+    public ResponseEntity<Void> deleteOwner(@PathVariable Long ownerId){
+        var deleteOwnerCommand = new DeleteOwnerCommand(ownerId);
+        ownerCommandService.handle(deleteOwnerCommand);
+        return ResponseEntity.noContent().build();
     }
 }
