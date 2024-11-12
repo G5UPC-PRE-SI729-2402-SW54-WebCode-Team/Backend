@@ -1,9 +1,11 @@
 package com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.aggregates;
 
 import com.webcode.team.application.greenmovebackend.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
+import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.commands.CreateVehicleCommand;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.valueobjects.VehicleStatus;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.valueobjects.VehicleType;
 import jakarta.persistence.*;
+import lombok.Setter;
 
 /**
  * Vehicle entity
@@ -20,12 +22,20 @@ public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
     @Enumerated(EnumType.STRING)
     private VehicleType type;
 
+    @Setter
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private Owner owner;
 
     public Vehicle() {
         // Required by JPA
+    }
+
+    public Vehicle(CreateVehicleCommand command) {
+        this.name = command.name();
+        this.urlImage = command.urlImage();
+        this.status = VehicleStatus.valueOf(command.status().toUpperCase());
+        this.type = VehicleType.valueOf(command.type().toUpperCase());
     }
 
 }
