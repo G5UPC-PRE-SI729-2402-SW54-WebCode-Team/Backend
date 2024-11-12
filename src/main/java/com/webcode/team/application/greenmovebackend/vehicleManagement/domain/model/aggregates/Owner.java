@@ -6,6 +6,7 @@ import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.mo
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.valueobjects.StreetAddress;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ import java.util.List;
  * @since 1.0
  */
 
+@Getter
 @Entity
 public class Owner extends AuditableAbstractAggregateRoot<Owner> {
     @Embedded
