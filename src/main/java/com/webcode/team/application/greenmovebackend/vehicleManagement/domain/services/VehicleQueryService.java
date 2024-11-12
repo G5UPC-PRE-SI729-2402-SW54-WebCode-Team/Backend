@@ -2,6 +2,8 @@ package com.webcode.team.application.greenmovebackend.vehicleManagement.domain.s
 
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.aggregates.Vehicle;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.queries.GetAllVehiclesByOwnerIdQuery;
+import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.queries.GetAllVehiclesByStatusQuery;
+import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.queries.GetAllVehiclesByTypeQuery;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.queries.GetVehicleByIdQuery;
 
 import java.util.List;
@@ -25,4 +27,18 @@ public interface VehicleQueryService {
      * @return the vehicle
      */
     Optional<Vehicle> handle(GetVehicleByIdQuery query);
+
+    /**
+     * Handle get all vehicles by status query
+     * @param query the get all vehicles by status query
+     * @return the list of vehicles
+     */
+    List<Vehicle> handle(GetAllVehiclesByStatusQuery query);
+
+    /**
+     * Handle get all vehicles by type query
+     * @param query the get all vehicles by type query
+     * @return the list of vehicles
+     */
+    List<Vehicle> handle(GetAllVehiclesByTypeQuery query);
 }
