@@ -1,6 +1,7 @@
 package com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.aggregates;
 
 import com.webcode.team.application.greenmovebackend.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
+import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.commands.CreateOwnerCommand;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.valueobjects.PersonName;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.valueobjects.StreetAddress;
 import jakarta.persistence.*;
@@ -42,6 +43,14 @@ public class Owner extends AuditableAbstractAggregateRoot<Owner> {
     public Owner() {
         // Required by JPA
         rating = 0.0f;
+    }
+
+    public Owner(CreateOwnerCommand command) {
+        this.name = new PersonName(command.firstName(), command.lastName());
+        this.urlImage = command.urlImage();
+        this.phone = command.phone();
+        this.address = new StreetAddress(command.street(), command.number(), command.city(), command.postalCode(), command.country());
+        this.rating = 0.0f;
     }
 
     public String getFullName() {
