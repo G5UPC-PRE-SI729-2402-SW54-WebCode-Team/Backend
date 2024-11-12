@@ -3,5 +3,5 @@ package com.webcode.team.application.greenmovebackend.membershipManagement.domai
 /**
  * GetAllTenants: Get all tenants query
  */
-public record GetAllTenants() {
+public record GetAllTenantsQuery() {
 }
