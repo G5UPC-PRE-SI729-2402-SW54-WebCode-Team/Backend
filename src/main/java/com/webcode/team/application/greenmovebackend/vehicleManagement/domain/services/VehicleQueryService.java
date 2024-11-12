@@ -9,15 +9,20 @@ import java.util.Optional;
 
 /**
  * Vehicle query service interface: handle queries related to vehicles
- * <br>
- * It is used to query vehicles by owner id and vehicle id
- * <br>
- * GetAllVehiclesByOwnerIdQuery: query to get all vehicles by owner id, return list of vehicles
- * <br>
- * GetVehicleByIdQuery: query to get vehicle by vehicle id, return optional vehicle
+ * @version 1.0
  */
 
 public interface VehicleQueryService {
+    /**
+     * Handle get all vehicles by owner id query
+     * @param query the get all vehicles by owner id query
+     * @return the list of vehicles
+     */
     List<Vehicle> handle(GetAllVehiclesByOwnerIdQuery query);
+    /**
+     * Handle get vehicle by id query
+     * @param query the get vehicle by id query
+     * @return the vehicle
+     */
     Optional<Vehicle> handle(GetVehicleByIdQuery query);
 }

@@ -8,15 +8,18 @@ import java.util.Optional;
 
 /**
  * Owner command service: This service is responsible for handling owner commands.
- * <br>
- * It provides methods to handle create and delete owner commands.
- * <br>
- * Create owner command: This command is used to create a new owner, returning an optional owner.
- * <br>
- * Delete owner command: This command is used to delete an existing owner, returning nothing.
  * @since 1.0
  */
 public interface OwnerCommandService {
+    /**
+     * Handle create owner command
+     * @param command the create owner command
+     * @return the created owner
+     */
     Optional<Owner> handle(CreateOwnerCommand command);
+    /**
+     * Handle delete owner command
+     * @param command the delete owner command
+     */
     void handle(DeleteOwnerCommand command);
 }

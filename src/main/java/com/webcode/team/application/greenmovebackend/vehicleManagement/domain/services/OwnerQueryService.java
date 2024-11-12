@@ -7,12 +7,13 @@ import java.util.Optional;
 
 /**
  * Owner query service: interface for handling owner queries
- * <br>
- * It provides a method to handle the query to get an owner by id
- * <br>
- * GetOwnerByIdQuery: query to get an owner by id, receives the id of the owner
  * @version 1.0
  */
 public interface OwnerQueryService {
+    /**
+     * Handle the query to get an owner by id
+     * @param query the query to get an owner by id
+     * @return the owner if found, otherwise empty
+     */
     Optional<Owner> handle(GetOwnerByIdQuery query);
 }

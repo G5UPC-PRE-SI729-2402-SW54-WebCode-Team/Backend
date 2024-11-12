@@ -7,15 +7,18 @@ import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.mo
 import java.util.Optional;
 /**
  * Vehicle command service: interface for handling vehicle commands
- * <br>
- * It provides methods to handle vehicle commands
- * <br>
- * CreateVehicleCommand: command to create a vehicle, returns an optional vehicle
- * <br>
- * DeleteVehicleCommand: command to delete a vehicle, returns nothing
  * @version 1.0
  */
 public interface VehicleCommandService {
+    /**
+     * Handle create vehicle command
+     * @param command the create vehicle command
+     * @return the created vehicle
+     */
     Optional<Vehicle> handle(CreateVehicleCommand command);
+    /**
+     * Handle delete vehicle command
+     * @param command the delete vehicle command
+     */
     void handle(DeleteVehicleCommand command);
 }
