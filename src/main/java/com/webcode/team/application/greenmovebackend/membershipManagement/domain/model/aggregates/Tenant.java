@@ -14,6 +14,7 @@ import lombok.Getter;
  * It contains the tenant's name, image, and phone number.
  * @see PersonName
  * @see AuditableAbstractAggregateRoot
+ * @see Membership
  * @since 1.0
  */
 @Getter
@@ -26,7 +27,7 @@ public class Tenant extends AuditableAbstractAggregateRoot<Tenant> {
     private String phone;
 
     @OneToOne (mappedBy = "tenant", orphanRemoval = true)
-    private Membership memership;
+    private Membership membership;
     public Tenant(){
         // Required by JPA
     }

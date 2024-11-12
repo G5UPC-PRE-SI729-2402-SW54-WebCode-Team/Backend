@@ -1,5 +1,12 @@
 package com.webcode.team.application.greenmovebackend.membershipManagement.domain.model.valueobjects;
 
+/**
+ * MembershipType enum
+ * @summary Enum for MembershipType
+ * It contains the membership types
+ * It could be DEFAULT, BASIC, INTERMEDIATE, ADVANCED
+ * @since 1.0
+ */
 public enum MembershipType {
     DEFAULT(0, "Default"),
     BASIC(1, "Basic"),

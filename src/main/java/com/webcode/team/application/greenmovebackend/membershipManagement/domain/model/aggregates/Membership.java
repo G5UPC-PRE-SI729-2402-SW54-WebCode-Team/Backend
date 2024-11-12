@@ -8,6 +8,14 @@ import lombok.Getter;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Membership aggregate root entity
+ * @summary Membership aggregate root entity
+ * It contains the membership type, start date, end date, tenant
+ * @see AuditableAbstractAggregateRoot
+ * @see MembershipType
+ * @since 1.0
+ */
 @Entity
 @Getter
 public class Membership extends AuditableAbstractAggregateRoot<Membership> {
@@ -19,6 +27,7 @@ public class Membership extends AuditableAbstractAggregateRoot<Membership> {
     @JoinColumn(name = "tenant_id")
     private Tenant tenant;
     public Membership(){
+        this.type = MembershipType.DEFAULT;
         this.startDate = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(this.startDate);
