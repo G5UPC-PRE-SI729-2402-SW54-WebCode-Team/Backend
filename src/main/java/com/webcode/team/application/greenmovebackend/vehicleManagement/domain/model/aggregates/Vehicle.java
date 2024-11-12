@@ -5,6 +5,7 @@ import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.mo
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.valueobjects.VehicleStatus;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.valueobjects.VehicleType;
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -13,6 +14,7 @@ import lombok.Setter;
  * It contains the name, image URL, status, type, and owner.
  * @since 1.0
  */
+@Getter
 @Entity
 public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
     private String name;
