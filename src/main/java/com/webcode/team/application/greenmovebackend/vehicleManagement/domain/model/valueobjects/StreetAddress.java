@@ -3,6 +3,14 @@ package com.webcode.team.application.greenmovebackend.vehicleManagement.domain.m
 
 import jakarta.persistence.Embeddable;
 
+/**
+ * StreetAddress value object
+ * @summary StreetAddress value object for the vehicle management bounded context
+ * this record is used to represent the street address of a vehicle
+ * @since 1.0
+ *
+ */
+
 @Embeddable
 public record StreetAddress(
         String street,
