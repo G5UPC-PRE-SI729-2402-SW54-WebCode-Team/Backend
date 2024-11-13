@@ -1,5 +1,7 @@
 package com.webcode.team.application.greenmovebackend.membershipManagement.domain.model.aggregates;
 
+import com.webcode.team.application.greenmovebackend.membershipManagement.domain.model.commands.CreateTenantCommand;
+import com.webcode.team.application.greenmovebackend.membershipManagement.domain.model.entities.Membership;
 import com.webcode.team.application.greenmovebackend.membershipManagement.domain.model.valueobjects.PersonName;
 import com.webcode.team.application.greenmovebackend.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import jakarta.persistence.Embedded;
@@ -30,5 +32,11 @@ public class Tenant extends AuditableAbstractAggregateRoot<Tenant> {
     private Membership membership;
     public Tenant(){
         // Required by JPA
+    }
+
+    public Tenant(CreateTenantCommand command){
+        this.name = new PersonName(command.firstName(), command.lastName());
+        this.urlImage = command.urlImage();
+        this.phone = command.phone();
     }
 }

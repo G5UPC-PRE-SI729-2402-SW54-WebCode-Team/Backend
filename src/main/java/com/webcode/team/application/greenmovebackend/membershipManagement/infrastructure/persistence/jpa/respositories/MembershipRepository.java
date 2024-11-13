@@ -1,6 +1,6 @@
 package com.webcode.team.application.greenmovebackend.membershipManagement.infrastructure.persistence.jpa.respositories;
 
-import com.webcode.team.application.greenmovebackend.membershipManagement.domain.model.aggregates.Membership;
+import com.webcode.team.application.greenmovebackend.membershipManagement.domain.model.entities.Membership;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
