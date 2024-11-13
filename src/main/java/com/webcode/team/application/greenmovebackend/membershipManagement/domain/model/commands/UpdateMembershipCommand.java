@@ -4,5 +4,5 @@ package com.webcode.team.application.greenmovebackend.membershipManagement.domai
  * UpdateMembershipCommand: Command to update a membership
  * @param membershipId
  */
-public record UpdateMembershipCommand(Long membershipId) {
+public record UpdateMembershipCommand(Long membershipId, String type) {
 }
