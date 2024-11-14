@@ -5,9 +5,11 @@ import com.webcode.team.application.greenmovebackend.membershipManagement.domain
 import com.webcode.team.application.greenmovebackend.membershipManagement.domain.model.commands.DeleteTenantCommand;
 import com.webcode.team.application.greenmovebackend.membershipManagement.domain.services.TenantCommandService;
 import com.webcode.team.application.greenmovebackend.membershipManagement.infrastructure.persistence.jpa.respositories.TenantRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class TenantCommandServiceImpl implements TenantCommandService {
 
     private final TenantRepository tenantRepository;

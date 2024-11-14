@@ -5,10 +5,12 @@ import com.webcode.team.application.greenmovebackend.membershipManagement.domain
 import com.webcode.team.application.greenmovebackend.membershipManagement.domain.model.queries.GetTenantByIdQuery;
 import com.webcode.team.application.greenmovebackend.membershipManagement.domain.services.TenantQueryService;
 import com.webcode.team.application.greenmovebackend.membershipManagement.infrastructure.persistence.jpa.respositories.TenantRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class TenantQueryServiceImpl implements TenantQueryService {
 
     private final TenantRepository tenantRepository;
