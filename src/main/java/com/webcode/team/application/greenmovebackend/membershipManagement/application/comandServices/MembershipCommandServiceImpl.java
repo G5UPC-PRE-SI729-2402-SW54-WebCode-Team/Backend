@@ -7,9 +7,11 @@ import com.webcode.team.application.greenmovebackend.membershipManagement.domain
 import com.webcode.team.application.greenmovebackend.membershipManagement.domain.services.MembershipCommandService;
 import com.webcode.team.application.greenmovebackend.membershipManagement.infrastructure.persistence.jpa.respositories.MembershipRepository;
 import com.webcode.team.application.greenmovebackend.membershipManagement.infrastructure.persistence.jpa.respositories.TenantRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class MembershipCommandServiceImpl implements MembershipCommandService {
     private final MembershipRepository membershipRepository;
     private final TenantRepository tenantRepository;
