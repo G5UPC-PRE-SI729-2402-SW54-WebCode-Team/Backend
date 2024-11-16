@@ -3,6 +3,7 @@ package com.webcode.team.application.greenmovebackend.vehicleManagement.applicat
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.aggregates.Vehicle;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.commands.CreateVehicleCommand;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.commands.DeleteVehicleCommand;
+import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.commands.UpdateVehicleStatusCommand;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.services.VehicleCommandService;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.infrastructure.persistence.jpa.repositories.OwnerRepository;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.infrastructure.persistence.jpa.repositories.VehicleRepository;
@@ -39,6 +40,23 @@ public class VehicleCommandServiceImpl implements VehicleCommandService {
             vehicleRepository.delete(vehicle.get());
         } catch (Exception e) {
             throw new IllegalArgumentException("Error while deleting vehicle: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public Optional<Vehicle> handle(UpdateVehicleStatusCommand command) {
+        var vehicleId = command.vehicleId();
+        if(!this.vehicleRepository.existsById(vehicleId)) {
+            throw new IllegalArgumentException("Vehicle with id " + vehicleId + " does not exist");
+        }
+        var vehicleToUpdate = vehicleRepository.findById(vehicleId).get();
+        vehicleToUpdate.updateInformation(command);
+
+        try {
+            var updatedVehicle = vehicleRepository.save(vehicleToUpdate);
+            return Optional.of(updatedVehicle);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Error while updating vehicle: " + e.getMessage());
         }
     }
 }

@@ -2,6 +2,7 @@ package com.webcode.team.application.greenmovebackend.vehicleManagement.domain.m
 
 import com.webcode.team.application.greenmovebackend.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.commands.CreateVehicleCommand;
+import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.commands.UpdateVehicleStatusCommand;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.valueobjects.VehicleStatus;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.valueobjects.VehicleType;
 import jakarta.persistence.*;
@@ -36,8 +37,12 @@ public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
     public Vehicle(CreateVehicleCommand command) {
         this.name = command.name();
         this.urlImage = command.urlImage();
-        this.status = VehicleStatus.valueOf(command.status().toUpperCase());
+        this.status = VehicleStatus.AVAILABLE;
         this.type = VehicleType.valueOf(command.type().toUpperCase());
+    }
+
+    public void updateInformation(UpdateVehicleStatusCommand command) {
+        this.status = VehicleStatus.valueOf(command.status().toUpperCase());
     }
 
 }

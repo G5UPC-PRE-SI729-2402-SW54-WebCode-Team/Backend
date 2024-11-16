@@ -8,7 +8,6 @@ public class CreateVehicleCommandFromResourceAssembler {
         return new CreateVehicleCommand(
                 resource.name(),
                 resource.urlImage(),
-                resource.status(),
                 resource.type(),
                 ownerId
         );

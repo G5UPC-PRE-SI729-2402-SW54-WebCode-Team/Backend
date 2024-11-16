@@ -1,6 +1,7 @@
 package com.webcode.team.application.greenmovebackend.vehicleManagement.interfaces.rest;
 
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.commands.DeleteVehicleCommand;
+import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.commands.UpdateVehicleStatusCommand;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.queries.GetAllVehiclesByStatusQuery;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.queries.GetAllVehiclesByTypeQuery;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.queries.GetVehicleByIdQuery;
@@ -68,5 +69,14 @@ public class VehicleController {
         var deleteVehicleCommand = new DeleteVehicleCommand(vehicleId);
         this.vehicleCommandService.handle(deleteVehicleCommand);
         return ResponseEntity.noContent().build();
+    }
+    @PutMapping("/{vehicleId}/status/{status}")
+    @Operation(summary = "Update vehicle status", description = "Update vehicle status")
+    public ResponseEntity<VehicleResource> updateVehicleStatus(@PathVariable Long vehicleId, @PathVariable String status) {
+        var updateVehicleStatusCommand = new UpdateVehicleStatusCommand(vehicleId, status);
+        var vehicle = this.vehicleCommandService.handle(updateVehicleStatusCommand);
+        if(vehicle.isEmpty()) return ResponseEntity.badRequest().build();
+        var vehicleResource = VehicleResourceFromEntityAssembler.toResourceFromEntity(vehicle.get());
+        return ResponseEntity.ok(vehicleResource);
     }
 }
