@@ -7,9 +7,7 @@ import com.webcode.team.application.greenmovebackend.reservationManagement.domai
 import com.webcode.team.application.greenmovebackend.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.aggregates.Owner;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.aggregates.Vehicle;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,6 +23,7 @@ public class Reservation extends AuditableAbstractAggregateRoot<Reservation> {
     private LocalDateTime endDate;
     private String latitude;
     private String longitude;
+    @Enumerated(EnumType.STRING)
     private ReservationStatus status;
     @Setter
     @ManyToOne

@@ -7,6 +7,7 @@ import com.webcode.team.application.greenmovebackend.vehicleManagement.interface
 public record ReservationResource(
         Long id,
         String reservationCode,
+        String status,
         String startDate,
         String endDate,
         String latitude,

@@ -2,7 +2,7 @@ package com.webcode.team.application.greenmovebackend.reservationManagement.doma
 
 public enum ReservationStatus {
     ACTIVE(1, "Pending"),
-    COMPLETED(1, "Confirmed");
+    COMPLETED(2, "Confirmed");
     private final int id;
     private final String description;
 

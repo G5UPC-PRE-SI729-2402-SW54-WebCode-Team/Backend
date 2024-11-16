@@ -10,6 +10,7 @@ public class ReservationResourceFromEntityAssembler {
         return new ReservationResource(
                 reservation.getId(),
                 reservation.getReservationCode(),
+                reservation.getStatus().name(),
                 reservation.getStartDate().toString(),
                 reservation.getEndDate().toString(),
                 reservation.getLatitude(),
