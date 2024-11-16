@@ -1,6 +1,7 @@
-package com.webcode.team.application.greenmovebackend.reservationManagement.application;
+package com.webcode.team.application.greenmovebackend.reservationManagement.application.internal.commandServices;
 
 import com.webcode.team.application.greenmovebackend.membershipManagement.infrastructure.persistence.jpa.respositories.TenantRepository;
+import com.webcode.team.application.greenmovebackend.reservationManagement.application.internal.outboundServices.acl.ExternalVehicleService;
 import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.aggregates.Reservation;
 import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.commands.CreateReservationCommand;
 import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.commands.DeleteReservationCommand;
@@ -19,24 +20,44 @@ public class ReservationCommandServiceImpl implements ReservationCommandService 
     private final ReservationRepository reservationRepository;
     private final OwnerRepository ownerRepository;
     private final TenantRepository tenantRepository;
-    private final VehicleRepository vehicleRepository;
-    public ReservationCommandServiceImpl(ReservationRepository reservationRepository, OwnerRepository ownerRepository, TenantRepository tenantRepository, VehicleRepository vehicleRepository) {
+    private final ExternalVehicleService externalVehicleService;
+    public ReservationCommandServiceImpl(ReservationRepository reservationRepository, OwnerRepository ownerRepository, TenantRepository tenantRepository, ExternalVehicleService externalVehicleService) {
         this.reservationRepository = reservationRepository;
         this.ownerRepository = ownerRepository;
         this.tenantRepository = tenantRepository;
-        this.vehicleRepository = vehicleRepository;
+        this.externalVehicleService = externalVehicleService;
     }
 
     @Override
     public Optional<Reservation> handle(CreateReservationCommand command) {
         var reservation = new Reservation(command);
         var owner = this.ownerRepository.findById(command.ownerId());
+        if (owner.isEmpty()) {
+            throw new IllegalArgumentException("Owner with id " + command.ownerId() + " does not exist");
+        }
         var tenant = this.tenantRepository.findById(command.tenantId());
-        var vehicle = this.vehicleRepository.findById(command.vehicleId());
+        if (tenant.isEmpty()) {
+            throw new IllegalArgumentException("Tenant with id " + command.tenantId() + " does not exist");
+        }
+        var vehicle = this.externalVehicleService.fetchVehicleById(command.vehicleId());
+        if (vehicle.isEmpty()) {
+            throw new IllegalArgumentException("Vehicle with id " + command.vehicleId() + " does not exist");
+        }
 
-        reservation.setOwner(owner.get());
+        if(!this.externalVehicleService.isOwnerOfVehicle(command.vehicleId(), command.ownerId())) {
+            throw new IllegalArgumentException("Owner with id " + command.ownerId() + " is not the owner of vehicle with id " + command.vehicleId());
+        }else {
+            reservation.setOwner(owner.get());
+        }
+
+        if(!this.externalVehicleService.isVehicleAvailable(command.vehicleId())) {
+            throw new IllegalArgumentException("Vehicle with id " + command.vehicleId() + " is not available");
+        }else{
+            reservation.setVehicle(vehicle.get());
+            this.externalVehicleService.updateVehicleStatus(command.vehicleId(), "ON_TRIP");
+        }
         reservation.setTenant(tenant.get());
-        reservation.setVehicle(vehicle.get());
+
 
         var createdReservation = reservationRepository.save(reservation);
         return Optional.of(createdReservation);

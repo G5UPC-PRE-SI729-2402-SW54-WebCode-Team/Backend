@@ -1,4 +1,4 @@
-package com.webcode.team.application.greenmovebackend.reservationManagement.application;
+package com.webcode.team.application.greenmovebackend.reservationManagement.application.internal.queryServices;
 
 import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.aggregates.Reservation;
 import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.queries.GetAllReservationsByOwnerIdQuery;
