@@ -11,7 +11,7 @@ public record ReservationResource(
         String startDate,
         String endDate,
         OwnerResource owner,
-        TenantResource tenant,
+        ReservationTenantResource tenant,
         ReservationVehicleResource vehicle
 ) {
 }
