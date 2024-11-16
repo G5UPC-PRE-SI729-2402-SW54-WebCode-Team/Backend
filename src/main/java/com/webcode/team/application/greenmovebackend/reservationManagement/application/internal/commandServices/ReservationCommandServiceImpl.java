@@ -6,6 +6,7 @@ import com.webcode.team.application.greenmovebackend.reservationManagement.domai
 import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.commands.CreateReservationCommand;
 import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.commands.DeleteReservationCommand;
 import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.commands.UpdateReservationStatusCommand;
+import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.valueObjects.ReservationStatus;
 import com.webcode.team.application.greenmovebackend.reservationManagement.domain.services.ReservationCommandService;
 import com.webcode.team.application.greenmovebackend.reservationManagement.infrastructure.persistence.jpa.repositories.ReservationRepository;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.infrastructure.persistence.jpa.repositories.OwnerRepository;
@@ -42,6 +43,11 @@ public class ReservationCommandServiceImpl implements ReservationCommandService 
         var vehicle = this.externalVehicleService.fetchVehicleById(command.vehicleId());
         if (vehicle.isEmpty()) {
             throw new IllegalArgumentException("Vehicle with id " + command.vehicleId() + " does not exist");
+        }
+
+        var activeReservation = this.reservationRepository.findByStatus(ReservationStatus.ACTIVE);
+        if(activeReservation.isPresent() && activeReservation.get().getTenant().getId().equals(tenant.get().getId())) {
+            throw new IllegalArgumentException("There is an active reservation for tenant with id " + command.tenantId());
         }
 
         if(!this.externalVehicleService.isOwnerOfVehicle(command.vehicleId(), command.ownerId())) {

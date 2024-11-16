@@ -3,7 +3,9 @@ package com.webcode.team.application.greenmovebackend.reservationManagement.appl
 import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.aggregates.Reservation;
 import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.queries.GetAllReservationsByOwnerIdQuery;
 import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.queries.GetAllReservationsByTenantIdQuery;
+import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.queries.GetActiveReservationByTenantId;
 import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.queries.GetReservationByIdQuery;
+import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.valueObjects.ReservationStatus;
 import com.webcode.team.application.greenmovebackend.reservationManagement.domain.services.ReservationQueryService;
 import com.webcode.team.application.greenmovebackend.reservationManagement.infrastructure.persistence.jpa.repositories.ReservationRepository;
 import org.springframework.stereotype.Service;
@@ -33,4 +35,14 @@ public class ReservationQueryServiceImpl implements ReservationQueryService {
     public Optional<Reservation> handle(GetReservationByIdQuery query) {
         return this.reservationRepository.findById(query.reservationId());
     }
+
+    @Override
+    public Optional<Reservation> handle(GetActiveReservationByTenantId query) {
+        var reservation = this.reservationRepository.findByStatus(ReservationStatus.ACTIVE);
+        if(reservation.isPresent() && reservation.get().getTenant().getId().equals(query.tenantId())) {
+            return reservation;
+        }
+        return Optional.empty();
+    }
+
 }

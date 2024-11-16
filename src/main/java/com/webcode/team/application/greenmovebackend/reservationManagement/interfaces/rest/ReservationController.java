@@ -3,6 +3,7 @@ package com.webcode.team.application.greenmovebackend.reservationManagement.inte
 import com.webcode.team.application.greenmovebackend.membershipManagement.domain.services.TenantQueryService;
 import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.commands.DeleteReservationCommand;
 import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.commands.UpdateReservationStatusCommand;
+import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.queries.GetActiveReservationByTenantId;
 import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.queries.GetAllReservationsByOwnerIdQuery;
 import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.queries.GetAllReservationsByTenantIdQuery;
 import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.queries.GetReservationByIdQuery;
@@ -80,6 +81,16 @@ public class ReservationController {
                 .map(ReservationResourceFromEntityAssembler::toResourceFromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(reservationResources);
+    }
+
+    @GetMapping("/tenant/{tenantId}/active")
+    @Operation(summary = "Get active reservation by tenant id", description = "Get active reservation by tenant id")
+    public ResponseEntity<ReservationResource> getActiveReservationByTenantId(@PathVariable Long tenantId) {
+        var getActiveReservationByTenantIdQuery = new GetActiveReservationByTenantId(tenantId);
+        var reservation = reservationQueryService.handle(getActiveReservationByTenantIdQuery);
+        if(reservation.isEmpty()) return ResponseEntity.notFound().build();
+        var reservationResource = ReservationResourceFromEntityAssembler.toResourceFromEntity(reservation.get());
+        return ResponseEntity.ok(reservationResource);
     }
 
     @DeleteMapping("/{reservationId}")

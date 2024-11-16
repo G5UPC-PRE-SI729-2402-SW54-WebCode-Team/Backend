@@ -3,6 +3,7 @@ package com.webcode.team.application.greenmovebackend.reservationManagement.inte
 import com.webcode.team.application.greenmovebackend.membershipManagement.interfaces.rest.transform.TenantResourceFromEntityAssembler;
 import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.aggregates.Reservation;
 import com.webcode.team.application.greenmovebackend.reservationManagement.interfaces.rest.resources.ReservationResource;
+import com.webcode.team.application.greenmovebackend.reservationManagement.interfaces.rest.resources.ReservationTenantResource;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.interfaces.rest.transform.OwnerResourceFromEntityAssembler;
 
 public class ReservationResourceFromEntityAssembler {
@@ -14,7 +15,7 @@ public class ReservationResourceFromEntityAssembler {
                 reservation.getStartDate().toString(),
                 reservation.getEndDate().toString(),
                 OwnerResourceFromEntityAssembler.toResourceFromEntity(reservation.getOwner()),
-                TenantResourceFromEntityAssembler.toResourceFromEntity(reservation.getTenant()),
+                ReservationTenantFromEntityAssembler.toResourceFromEntity(reservation.getTenant()),
                 ReservationVehicleFromEntityAssembler.toResourceFromEntity(reservation.getVehicle())
         );
     }
