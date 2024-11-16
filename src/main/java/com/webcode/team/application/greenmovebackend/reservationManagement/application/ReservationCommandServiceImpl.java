@@ -4,9 +4,9 @@ import com.webcode.team.application.greenmovebackend.membershipManagement.infras
 import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.aggregates.Reservation;
 import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.commands.CreateReservationCommand;
 import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.commands.DeleteReservationCommand;
+import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.commands.UpdateReservationStatusCommand;
 import com.webcode.team.application.greenmovebackend.reservationManagement.domain.services.ReservationCommandService;
 import com.webcode.team.application.greenmovebackend.reservationManagement.infrastructure.persistence.jpa.repositories.ReservationRepository;
-import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.aggregates.Owner;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.infrastructure.persistence.jpa.repositories.OwnerRepository;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.infrastructure.persistence.jpa.repositories.VehicleRepository;
 import org.springframework.stereotype.Service;
@@ -52,6 +52,23 @@ public class ReservationCommandServiceImpl implements ReservationCommandService 
             this.reservationRepository.deleteById(reservationId);
         }catch (Exception e) {
             throw new IllegalArgumentException("Error deleting reservation with id " + reservationId);
+        }
+    }
+
+    @Override
+    public Optional<Reservation> handle(UpdateReservationStatusCommand command) {
+        var reservationId = command.reservationId();
+        if(!this.reservationRepository.existsById(reservationId)) {
+            throw new IllegalArgumentException("Reservation with id " + reservationId + " does not exist");
+        }
+        var reservationToUpdate = this.reservationRepository.findById(reservationId).get();
+        reservationToUpdate.updateStatus(command);
+
+        try {
+            var updatedReservation = this.reservationRepository.save(reservationToUpdate);
+            return Optional.of(updatedReservation);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Error updating reservation with id " + reservationId);
         }
     }
 }

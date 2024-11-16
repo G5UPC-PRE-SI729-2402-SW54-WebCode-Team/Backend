@@ -2,6 +2,7 @@ package com.webcode.team.application.greenmovebackend.reservationManagement.inte
 
 import com.webcode.team.application.greenmovebackend.membershipManagement.domain.services.TenantQueryService;
 import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.commands.DeleteReservationCommand;
+import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.commands.UpdateReservationStatusCommand;
 import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.queries.GetAllReservationsByOwnerIdQuery;
 import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.queries.GetAllReservationsByTenantIdQuery;
 import com.webcode.team.application.greenmovebackend.reservationManagement.domain.model.queries.GetReservationByIdQuery;
@@ -95,4 +96,13 @@ public class ReservationController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/{reservationId}/status/{status}")
+    @Operation(summary = "Update reservation status", description = "Update reservation status")
+    public ResponseEntity<ReservationResource> updateReservationStatus(@PathVariable Long reservationId, @PathVariable String status) {
+        var updateReservationStatusCommand = new UpdateReservationStatusCommand(reservationId, status);
+        var reservation = this.reservationCommandService.handle(updateReservationStatusCommand);
+        if(reservation.isEmpty()) return ResponseEntity.badRequest().build();
+        var reservationResource = ReservationResourceFromEntityAssembler.toResourceFromEntity(reservation.get());
+        return ResponseEntity.ok(reservationResource);
+    }
 }
