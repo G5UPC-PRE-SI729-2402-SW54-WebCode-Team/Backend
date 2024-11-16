@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(value = "/api/v1/reservations")
 @Tag(name = "Reservations", description = "Reservations endpoints")
+@CrossOrigin(origins = "*", methods = { RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE })
 public class ReservationController {
     private final ReservationQueryService reservationQueryService;
     private final ReservationCommandService reservationCommandService;

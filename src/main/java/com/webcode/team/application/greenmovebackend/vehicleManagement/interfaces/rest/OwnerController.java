@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/api/v1/owners")
 @Tag(name = "Owner", description = "Owner endpoints")
+@CrossOrigin(origins = "*", methods = { RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE })
 public class OwnerController {
     private final OwnerQueryService ownerQueryService;
     private final OwnerCommandService ownerCommandService;

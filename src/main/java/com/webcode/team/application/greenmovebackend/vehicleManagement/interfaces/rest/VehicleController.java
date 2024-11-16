@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(value = "/api/v1/vehicles")
 @Tag(name = "Vehicles", description = "Vehicles endpoints")
+@CrossOrigin(origins = "*", methods = { RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE })
 public class VehicleController {
     private final VehicleQueryService vehicleQueryService;
     private final VehicleCommandService vehicleCommandService;
