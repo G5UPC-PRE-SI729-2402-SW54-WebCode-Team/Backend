@@ -3,8 +3,6 @@ package com.webcode.team.application.greenmovebackend.reservationManagement.doma
 public record CreateReservationCommand(
         Long vehicleId,
         Long ownerId,
-        Long tenantId,
-        String latitude,
-        String longitude
+        Long tenantId
 ) {
 }

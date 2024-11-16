@@ -10,8 +10,6 @@ public record ReservationResource(
         String status,
         String startDate,
         String endDate,
-        String latitude,
-        String longitude,
         OwnerResource owner,
         TenantResource tenant,
         ReservationVehicleResource vehicle

@@ -29,16 +29,10 @@ import java.util.stream.Collectors;
 public class ReservationController {
     private final ReservationQueryService reservationQueryService;
     private final ReservationCommandService reservationCommandService;
-    private final OwnerQueryService ownerQueryService;
-    private final VehicleQueryService vehicleQueryService;
-    private final TenantQueryService tenantQueryService;
 
-    public ReservationController(ReservationQueryService reservationQueryService, ReservationCommandService reservationCommandService, OwnerQueryService ownerQueryService, VehicleQueryService vehicleQueryService, TenantQueryService tenantQueryService) {
+    public ReservationController(ReservationQueryService reservationQueryService, ReservationCommandService reservationCommandService) {
         this.reservationQueryService = reservationQueryService;
         this.reservationCommandService = reservationCommandService;
-        this.ownerQueryService = ownerQueryService;
-        this.vehicleQueryService = vehicleQueryService;
-        this.tenantQueryService = tenantQueryService;
     }
 
     @PostMapping

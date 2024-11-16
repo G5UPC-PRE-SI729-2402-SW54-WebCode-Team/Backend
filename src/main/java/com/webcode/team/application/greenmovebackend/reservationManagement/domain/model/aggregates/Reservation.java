@@ -21,8 +21,6 @@ public class Reservation extends AuditableAbstractAggregateRoot<Reservation> {
     private String reservationCode;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private String latitude;
-    private String longitude;
     @Enumerated(EnumType.STRING)
     private ReservationStatus status;
     @Setter
@@ -47,8 +45,6 @@ public class Reservation extends AuditableAbstractAggregateRoot<Reservation> {
         this.reservationCode = UUID.randomUUID().toString();
         this.startDate = LocalDateTime.now();
         this.endDate = LocalDateTime.now().plusHours(4);
-        this.latitude = command.latitude();
-        this.longitude = command.longitude();
         this.status = ReservationStatus.ACTIVE;
     }
 

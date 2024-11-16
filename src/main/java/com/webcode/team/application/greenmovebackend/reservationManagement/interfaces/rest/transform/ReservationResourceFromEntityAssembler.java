@@ -13,8 +13,6 @@ public class ReservationResourceFromEntityAssembler {
                 reservation.getStatus().name(),
                 reservation.getStartDate().toString(),
                 reservation.getEndDate().toString(),
-                reservation.getLatitude(),
-                reservation.getLongitude(),
                 OwnerResourceFromEntityAssembler.toResourceFromEntity(reservation.getOwner()),
                 TenantResourceFromEntityAssembler.toResourceFromEntity(reservation.getTenant()),
                 ReservationVehicleFromEntityAssembler.toResourceFromEntity(reservation.getVehicle())

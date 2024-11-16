@@ -8,6 +8,8 @@ public class VehicleResourceFromEntityAssembler {
         return new VehicleResource(
                 vehicle.getId(),
                 vehicle.getName(),
+                vehicle.getLatitude(),
+                vehicle.getLongitude(),
                 vehicle.getUrlImage(),
                 vehicle.getStatus().name(),
                 vehicle.getType().name(),

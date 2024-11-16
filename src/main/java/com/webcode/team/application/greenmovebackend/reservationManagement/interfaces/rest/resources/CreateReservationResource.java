@@ -3,8 +3,6 @@ package com.webcode.team.application.greenmovebackend.reservationManagement.inte
 public record CreateReservationResource(
         Long vehicleId,
         Long ownerId,
-        Long tenantId,
-        String latitude,
-        String longitude
+        Long tenantId
 ) {
 }

@@ -8,9 +8,7 @@ public class CreateReservationCommandFromResourceAssembler {
         return new CreateReservationCommand(
                 resource.vehicleId(),
                 resource.ownerId(),
-                resource.tenantId(),
-                resource.latitude(),
-                resource.longitude()
+                resource.tenantId()
         );
     }
 }
