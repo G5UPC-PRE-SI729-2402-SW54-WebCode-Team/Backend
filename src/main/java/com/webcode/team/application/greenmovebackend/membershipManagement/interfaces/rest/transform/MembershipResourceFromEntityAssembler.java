@@ -8,7 +8,6 @@ public class MembershipResourceFromEntityAssembler {
         return new MembershipResource(
                 membership.getId(),
                 membership.getType().name(),
-                TenantResourceFromEntityAssembler.toResourceFromEntity(membership.getTenant()),
                 membership.getStartDate(),
                 membership.getEndDate()
         );
