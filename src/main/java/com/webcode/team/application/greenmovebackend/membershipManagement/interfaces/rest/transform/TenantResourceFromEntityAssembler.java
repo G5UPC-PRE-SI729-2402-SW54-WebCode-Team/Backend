@@ -9,7 +9,8 @@ public class TenantResourceFromEntityAssembler {
                 tenant.getId(),
                 tenant.getName().getFullName(),
                 tenant.getUrlImage(),
-                tenant.getPhone()
+                tenant.getPhone(),
+                MembershipResourceFromEntityAssembler.toResourceFromEntity(tenant.getMembership())
         );
     }
 }

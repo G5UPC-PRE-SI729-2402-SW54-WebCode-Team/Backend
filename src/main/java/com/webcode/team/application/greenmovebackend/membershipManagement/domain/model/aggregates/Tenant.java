@@ -39,4 +39,14 @@ public class Tenant extends AuditableAbstractAggregateRoot<Tenant> {
         this.urlImage = command.urlImage();
         this.phone = command.phone();
     }
+
+    public String getReservationTime() {
+        return switch (this.membership.getType()) {
+            case DEFAULT -> "4";
+            case BASIC -> "5";
+            case INTERMEDIATE -> "7";
+            case ADVANCED -> "8";
+            default -> "3";
+        };
+    }
 }

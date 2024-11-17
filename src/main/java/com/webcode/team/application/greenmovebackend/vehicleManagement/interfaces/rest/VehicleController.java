@@ -1,6 +1,7 @@
 package com.webcode.team.application.greenmovebackend.vehicleManagement.interfaces.rest;
 
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.commands.DeleteVehicleCommand;
+import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.commands.UpdateVehicleStatusCommand;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.queries.GetAllVehiclesByStatusQuery;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.queries.GetAllVehiclesByTypeQuery;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.queries.GetVehicleByIdQuery;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(value = "/api/v1/vehicles")
 @Tag(name = "Vehicles", description = "Vehicles endpoints")
+@CrossOrigin(origins = "*", methods = { RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE })
 public class VehicleController {
     private final VehicleQueryService vehicleQueryService;
     private final VehicleCommandService vehicleCommandService;
@@ -67,5 +69,14 @@ public class VehicleController {
         var deleteVehicleCommand = new DeleteVehicleCommand(vehicleId);
         this.vehicleCommandService.handle(deleteVehicleCommand);
         return ResponseEntity.noContent().build();
+    }
+    @PutMapping("/{vehicleId}/status/{status}")
+    @Operation(summary = "Update vehicle status", description = "Update vehicle status")
+    public ResponseEntity<VehicleResource> updateVehicleStatus(@PathVariable Long vehicleId, @PathVariable String status) {
+        var updateVehicleStatusCommand = new UpdateVehicleStatusCommand(vehicleId, status);
+        var vehicle = this.vehicleCommandService.handle(updateVehicleStatusCommand);
+        if(vehicle.isEmpty()) return ResponseEntity.badRequest().build();
+        var vehicleResource = VehicleResourceFromEntityAssembler.toResourceFromEntity(vehicle.get());
+        return ResponseEntity.ok(vehicleResource);
     }
 }

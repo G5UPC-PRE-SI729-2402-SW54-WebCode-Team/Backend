@@ -7,7 +7,6 @@ import java.util.Date;
 public record MembershipResource(
         Long id,
         String type,
-        TenantResource tenant,
         Date startDate,
         Date endDate
 ) {

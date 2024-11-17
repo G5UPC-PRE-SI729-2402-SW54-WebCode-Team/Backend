@@ -9,7 +9,6 @@ import com.webcode.team.application.greenmovebackend.membershipManagement.domain
 import com.webcode.team.application.greenmovebackend.membershipManagement.domain.services.TenantQueryService;
 import com.webcode.team.application.greenmovebackend.membershipManagement.interfaces.rest.resources.CreateMembershipResource;
 import com.webcode.team.application.greenmovebackend.membershipManagement.interfaces.rest.resources.CreateTenantResource;
-import com.webcode.team.application.greenmovebackend.membershipManagement.interfaces.rest.resources.MembershipResource;
 import com.webcode.team.application.greenmovebackend.membershipManagement.interfaces.rest.resources.TenantResource;
 import com.webcode.team.application.greenmovebackend.membershipManagement.interfaces.rest.transform.CreateMembershipCommandFromResourceAssembler;
 import com.webcode.team.application.greenmovebackend.membershipManagement.interfaces.rest.transform.CreateTenantCommandFromResourceAssembler;
@@ -25,6 +24,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(value="/api/v1/tenants")
 @Tag(name = "Tenant Management", description = "Tenant Management API")
+@CrossOrigin(origins = "*", methods = { RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE })
 public class TenantController {
     private final TenantQueryService tenantQueryService;
     private final TenantCommandService tenantCommandService;

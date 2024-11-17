@@ -3,6 +3,7 @@ package com.webcode.team.application.greenmovebackend.vehicleManagement.domain.s
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.aggregates.Vehicle;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.commands.CreateVehicleCommand;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.commands.DeleteVehicleCommand;
+import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.commands.UpdateVehicleStatusCommand;
 
 import java.util.Optional;
 /**
@@ -21,4 +22,10 @@ public interface VehicleCommandService {
      * @param command the delete vehicle command
      */
     void handle(DeleteVehicleCommand command);
+    /**
+     * Handle update vehicle status command
+     * @param command the update vehicle status command
+     * @return the updated vehicle
+     */
+    Optional<Vehicle> handle(UpdateVehicleStatusCommand command);
 }

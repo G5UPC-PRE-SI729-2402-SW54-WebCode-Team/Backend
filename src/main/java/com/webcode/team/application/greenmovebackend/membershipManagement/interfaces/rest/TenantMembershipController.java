@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value="/api/v1/tenant/{tenantId}/membership")
 @Tag(name = "Membership Management", description = "Membership Management API")
+@CrossOrigin(origins = "*", methods = { RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE })
 public class TenantMembershipController {
     private final MembershipQueryService membershipQueryService;
     private final MembershipCommandService membershipCommandService;

@@ -4,6 +4,7 @@ public record TenantResource(
         Long id,
         String name,
         String urlImage,
-        String phone
+        String phone,
+        MembershipResource membership
 ) {
 }
