@@ -2,8 +2,10 @@ package com.webcode.team.application.greenmovebackend.iam.application.internal.c
 
 
 import com.webcode.team.application.greenmovebackend.iam.application.internal.outboundservices.hashing.HashingService;
+import com.webcode.team.application.greenmovebackend.iam.application.internal.outboundservices.owners.ExternalOwnerService;
 import com.webcode.team.application.greenmovebackend.iam.application.internal.outboundservices.tokens.TokenService;
 import com.webcode.team.application.greenmovebackend.iam.domain.model.aggregates.User;
+import com.webcode.team.application.greenmovebackend.iam.domain.model.commands.CreateUserOwnerCommand;
 import com.webcode.team.application.greenmovebackend.iam.domain.model.commands.SignInCommand;
 import com.webcode.team.application.greenmovebackend.iam.domain.model.commands.SignUpCommand;
 import com.webcode.team.application.greenmovebackend.iam.domain.services.UserCommandService;
@@ -29,13 +31,16 @@ public class UserCommandServiceImpl implements UserCommandService {
   private final TokenService tokenService;
   private final RoleRepository roleRepository;
 
+  private final ExternalOwnerService externalOwnerService;
+
   public UserCommandServiceImpl(UserRepository userRepository, HashingService hashingService,
-      TokenService tokenService, RoleRepository roleRepository) {
+                                TokenService tokenService, RoleRepository roleRepository, ExternalOwnerService externalOwnerService) {
 
     this.userRepository = userRepository;
     this.hashingService = hashingService;
     this.tokenService = tokenService;
     this.roleRepository = roleRepository;
+    this.externalOwnerService = externalOwnerService;
   }
 
   /**
@@ -79,5 +84,22 @@ public class UserCommandServiceImpl implements UserCommandService {
     var user = new User(command.username(), hashingService.encode(command.password()), roles);
     userRepository.save(user);
     return userRepository.findByUsername(command.username());
+  }
+
+  @Override
+  public Optional<User> handle(CreateUserOwnerCommand command) {
+    var userId = command.userId();
+    if (userRepository.findById(userId).isEmpty()) {
+      throw new RuntimeException("User not found");
+    }
+    var user = userRepository.findById(userId).get();
+    var owner = externalOwnerService.createUserOwner(command);
+    user.setOwner(owner.get());
+    try {
+      var updatedUser = this.userRepository.save(user);
+      return Optional.of(updatedUser);
+    } catch (Exception e) {
+      throw new RuntimeException("Error setting user as owner");
+    }
   }
 }

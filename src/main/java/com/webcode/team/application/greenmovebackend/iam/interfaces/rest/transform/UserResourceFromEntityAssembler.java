@@ -2,6 +2,7 @@ package com.webcode.team.application.greenmovebackend.iam.interfaces.rest.transf
 
 import com.webcode.team.application.greenmovebackend.iam.domain.model.aggregates.User;
 import com.webcode.team.application.greenmovebackend.iam.domain.model.entities.Role;
+import com.webcode.team.application.greenmovebackend.iam.interfaces.rest.resources.UserOwnerResource;
 import com.webcode.team.application.greenmovebackend.iam.interfaces.rest.resources.UserResource;
 
 public class UserResourceFromEntityAssembler {
@@ -10,6 +11,19 @@ public class UserResourceFromEntityAssembler {
     var roles = user.getRoles().stream()
         .map(Role::getStringName)
         .toList();
-    return new UserResource(user.getId(), user.getUsername(), roles);
+      if (user.getOwner() == null) {
+          return new UserResource(
+                  user.getId(),
+                  user.getUsername(),
+                  roles,
+                  null);
+      } else {
+        return new UserResource(
+                user.getId(),
+                user.getUsername(),
+                roles,
+                UserOwnerFromEntityAssembler.toResourceFromEntity(user.getOwner()));
+      }
+
   }
 }

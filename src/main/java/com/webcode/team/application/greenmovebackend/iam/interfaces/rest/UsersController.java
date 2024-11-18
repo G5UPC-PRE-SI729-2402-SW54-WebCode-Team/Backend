@@ -1,17 +1,22 @@
 package com.webcode.team.application.greenmovebackend.iam.interfaces.rest;
 
+import com.webcode.team.application.greenmovebackend.iam.domain.model.commands.CreateUserOwnerCommand;
 import com.webcode.team.application.greenmovebackend.iam.domain.model.queries.GetAllUsersQuery;
 import com.webcode.team.application.greenmovebackend.iam.domain.model.queries.GetUserByIdQuery;
+import com.webcode.team.application.greenmovebackend.iam.domain.services.UserCommandService;
 import com.webcode.team.application.greenmovebackend.iam.domain.services.UserQueryService;
+import com.webcode.team.application.greenmovebackend.iam.interfaces.rest.resources.CreateUserOwnerResource;
 import com.webcode.team.application.greenmovebackend.iam.interfaces.rest.resources.UserResource;
+import com.webcode.team.application.greenmovebackend.iam.interfaces.rest.transform.CreateUserOwnerCommandFromResourceAssembler;
 import com.webcode.team.application.greenmovebackend.iam.interfaces.rest.transform.UserResourceFromEntityAssembler;
+import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.services.OwnerCommandService;
+import com.webcode.team.application.greenmovebackend.vehicleManagement.interfaces.rest.resources.CreateOwnerResource;
+import com.webcode.team.application.greenmovebackend.vehicleManagement.interfaces.rest.transform.CreateOwnerCommandFromResourceAssembler;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,9 +32,11 @@ import java.util.List;
 public class UsersController {
 
   private final UserQueryService userQueryService;
+  private final UserCommandService userCommandService;
 
-  public UsersController(UserQueryService userQueryService) {
+  public UsersController(UserQueryService userQueryService, UserCommandService userCommandService) {
     this.userQueryService = userQueryService;
+      this.userCommandService = userCommandService;
   }
 
   /**
@@ -63,6 +70,23 @@ public class UsersController {
     if (user.isEmpty()) {
       return ResponseEntity.notFound().build();
     }
+    var userResource = UserResourceFromEntityAssembler.toResourceFromEntity(user.get());
+    return ResponseEntity.ok(userResource);
+  }
+
+  @PutMapping(value = "/{userId}/owner")
+  @Operation(summary = "Set user as owner", description = "Set user as owner")
+  public ResponseEntity<UserResource> setUserAsOwner(@PathVariable Long userId, @RequestBody CreateUserOwnerResource resource) {
+    if(this.userQueryService.handle(new GetUserByIdQuery(userId)).isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+    var role = this.userQueryService.handle(new GetUserByIdQuery(userId)).get().getRoles().stream().findFirst().get().getName().toString();
+    if(!role.equals("ROLE_OWNER")) {
+      throw new RuntimeException("User is not an owner");
+    }
+    var createUserOwnerCommand = CreateUserOwnerCommandFromResourceAssembler.toCommandFromResource(resource, userId);
+    var user = userCommandService.handle(createUserOwnerCommand);
+    if(user.isEmpty()) return ResponseEntity.badRequest().build();
     var userResource = UserResourceFromEntityAssembler.toResourceFromEntity(user.get());
     return ResponseEntity.ok(userResource);
   }
