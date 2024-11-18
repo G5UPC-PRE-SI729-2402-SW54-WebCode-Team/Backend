@@ -101,7 +101,5 @@ public class ReservationCommandServiceImpl implements ReservationCommandService 
         } catch (Exception e) {
             throw new IllegalArgumentException("Error updating reservation with id " + reservationId);
         }
-
-
     }
 }
