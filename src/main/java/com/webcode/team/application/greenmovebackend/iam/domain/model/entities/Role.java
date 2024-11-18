@@ -38,8 +38,6 @@ public class Role {
    * Get the name of the role as a string
    * @return the name of the role as a string
    */
-
-  //TODO check usages
   public String getStringName() {
     return name.name();
   }
@@ -48,7 +46,6 @@ public class Role {
    * Get the default role
    * @return the default role
    */
-  //TODO check usages
   public static Role getDefaultRole() {
     return new Role(Roles.ROLE_USER);
   }
@@ -58,7 +55,6 @@ public class Role {
    * @param name the name of the role
    * @return the role
    */
-  //TODO check usages
   public static Role toRoleFromName(String name) {
     return new Role(Roles.valueOf(name));
   }
