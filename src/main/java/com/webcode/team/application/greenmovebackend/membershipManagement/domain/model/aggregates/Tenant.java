@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * This class represents the Tenant aggregate root.
@@ -28,6 +29,7 @@ public class Tenant extends AuditableAbstractAggregateRoot<Tenant> {
     @Size(max = 9)
     private String phone;
 
+    @Setter
     @OneToOne (mappedBy = "tenant", orphanRemoval = true)
     private Membership membership;
     public Tenant(){

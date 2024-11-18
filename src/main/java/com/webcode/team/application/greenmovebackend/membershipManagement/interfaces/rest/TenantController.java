@@ -3,8 +3,10 @@ package com.webcode.team.application.greenmovebackend.membershipManagement.inter
 import com.webcode.team.application.greenmovebackend.membershipManagement.domain.model.aggregates.Tenant;
 import com.webcode.team.application.greenmovebackend.membershipManagement.domain.model.commands.DeleteTenantCommand;
 import com.webcode.team.application.greenmovebackend.membershipManagement.domain.model.queries.GetAllTenantsQuery;
+import com.webcode.team.application.greenmovebackend.membershipManagement.domain.model.queries.GetMembershipByTenantIdQuery;
 import com.webcode.team.application.greenmovebackend.membershipManagement.domain.model.queries.GetTenantByIdQuery;
 import com.webcode.team.application.greenmovebackend.membershipManagement.domain.services.MembershipCommandService;
+import com.webcode.team.application.greenmovebackend.membershipManagement.domain.services.MembershipQueryService;
 import com.webcode.team.application.greenmovebackend.membershipManagement.domain.services.TenantCommandService;
 import com.webcode.team.application.greenmovebackend.membershipManagement.domain.services.TenantQueryService;
 import com.webcode.team.application.greenmovebackend.membershipManagement.interfaces.rest.resources.CreateMembershipResource;
@@ -29,10 +31,12 @@ public class TenantController {
     private final TenantQueryService tenantQueryService;
     private final TenantCommandService tenantCommandService;
     private final MembershipCommandService membershipCommandService;
-    public TenantController(TenantQueryService tenantQueryService, TenantCommandService tenantCommandService, MembershipCommandService membershipCommandService) {
+    private final MembershipQueryService membershipQueryService;
+    public TenantController(TenantQueryService tenantQueryService, TenantCommandService tenantCommandService, MembershipCommandService membershipCommandService, MembershipQueryService membershipQueryService) {
         this.tenantQueryService = tenantQueryService;
         this.tenantCommandService = tenantCommandService;
         this.membershipCommandService = membershipCommandService;
+        this.membershipQueryService = membershipQueryService;
     }
 
     @GetMapping
@@ -72,6 +76,13 @@ public class TenantController {
 
         var createMembershipCommand = CreateMembershipCommandFromResourceAssembler.toCommandFromResource(new CreateMembershipResource("DEFAULT"), tenant.get().getId());
         this.membershipCommandService.handle(createMembershipCommand);
+
+        var getMembershipByTenantIdQuery = new GetMembershipByTenantIdQuery(tenant.get().getId());
+        var membership = this.membershipQueryService.handle(getMembershipByTenantIdQuery);
+
+        if(membership.isEmpty()) return ResponseEntity.badRequest().build();
+
+        tenant.get().setMembership(membership.get());
 
         var tenantResource = TenantResourceFromEntityAssembler.toResourceFromEntity(tenant.get());
         return ResponseEntity.ok(tenantResource);
