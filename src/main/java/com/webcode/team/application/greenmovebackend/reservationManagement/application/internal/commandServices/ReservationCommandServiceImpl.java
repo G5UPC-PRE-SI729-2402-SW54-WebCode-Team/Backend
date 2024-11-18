@@ -89,13 +89,19 @@ public class ReservationCommandServiceImpl implements ReservationCommandService 
             throw new IllegalArgumentException("Reservation with id " + reservationId + " does not exist");
         }
         var reservationToUpdate = this.reservationRepository.findById(reservationId).get();
-        reservationToUpdate.updateStatus(command);
+        var reservationVehicleId = reservationToUpdate.getVehicle().getId();
+        if (command.status().equals("COMPLETED")) {
+            this.externalVehicleService.updateVehicleStatus(reservationVehicleId, "AVAILABLE");
+        }
 
+        reservationToUpdate.updateStatus(command);
         try {
             var updatedReservation = this.reservationRepository.save(reservationToUpdate);
             return Optional.of(updatedReservation);
         } catch (Exception e) {
             throw new IllegalArgumentException("Error updating reservation with id " + reservationId);
         }
+
+
     }
 }
