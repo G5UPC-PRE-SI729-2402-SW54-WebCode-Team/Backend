@@ -2,5 +2,5 @@ package com.webcode.team.application.greenmovebackend.iam.interfaces.rest.resour
 
 import java.util.List;
 
-public record UserResource(Long id, String username, List<String> roles, UserOwnerResource owner) {
+public record UserResource(Long id, String username, List<String> roles, UserOwnerResource owner, UserTenantResource tenant) {
 }

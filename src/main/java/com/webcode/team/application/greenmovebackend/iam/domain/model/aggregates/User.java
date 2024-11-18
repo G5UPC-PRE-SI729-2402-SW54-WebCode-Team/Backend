@@ -40,11 +40,13 @@ public class User extends AuditableAbstractAggregateRoot<User> {
       joinColumns = @JoinColumn(name = "user_id"),
       inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles;
+
   @Nullable
   @Setter
   @ManyToOne
   @JoinColumn(name = "owner_id")
   private Owner owner;
+
   @Nullable
   @Setter
   @ManyToOne

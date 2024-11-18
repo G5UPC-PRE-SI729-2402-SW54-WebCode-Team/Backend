@@ -6,8 +6,10 @@ import com.webcode.team.application.greenmovebackend.iam.domain.model.queries.Ge
 import com.webcode.team.application.greenmovebackend.iam.domain.services.UserCommandService;
 import com.webcode.team.application.greenmovebackend.iam.domain.services.UserQueryService;
 import com.webcode.team.application.greenmovebackend.iam.interfaces.rest.resources.CreateUserOwnerResource;
+import com.webcode.team.application.greenmovebackend.iam.interfaces.rest.resources.CreateUserTenantResource;
 import com.webcode.team.application.greenmovebackend.iam.interfaces.rest.resources.UserResource;
 import com.webcode.team.application.greenmovebackend.iam.interfaces.rest.transform.CreateUserOwnerCommandFromResourceAssembler;
+import com.webcode.team.application.greenmovebackend.iam.interfaces.rest.transform.CreateUserTenantCommandFromResourceAssembler;
 import com.webcode.team.application.greenmovebackend.iam.interfaces.rest.transform.UserResourceFromEntityAssembler;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.services.OwnerCommandService;
 import com.webcode.team.application.greenmovebackend.vehicleManagement.interfaces.rest.resources.CreateOwnerResource;
@@ -86,6 +88,23 @@ public class UsersController {
     }
     var createUserOwnerCommand = CreateUserOwnerCommandFromResourceAssembler.toCommandFromResource(resource, userId);
     var user = userCommandService.handle(createUserOwnerCommand);
+    if(user.isEmpty()) return ResponseEntity.badRequest().build();
+    var userResource = UserResourceFromEntityAssembler.toResourceFromEntity(user.get());
+    return ResponseEntity.ok(userResource);
+  }
+
+  @PutMapping(value = "/{userId}/tenant")
+  @Operation(summary = "Set user as tenant", description = "Set user as tenant")
+  public ResponseEntity<UserResource> setUserAsTenant(@PathVariable Long userId, @RequestBody CreateUserTenantResource resource){
+    if(this.userQueryService.handle(new GetUserByIdQuery(userId)).isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+    var role = this.userQueryService.handle(new GetUserByIdQuery(userId)).get().getRoles().stream().findFirst().get().getName().toString();
+    if(!role.equals("ROLE_TENANT")) {
+      throw new RuntimeException("User is not a tenant");
+    }
+    var createUserTenantCommand = CreateUserTenantCommandFromResourceAssembler.toCommandFromResource(resource, userId);
+    var user = userCommandService.handle(createUserTenantCommand);
     if(user.isEmpty()) return ResponseEntity.badRequest().build();
     var userResource = UserResourceFromEntityAssembler.toResourceFromEntity(user.get());
     return ResponseEntity.ok(userResource);

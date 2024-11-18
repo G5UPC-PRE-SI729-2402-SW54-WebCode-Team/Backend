@@ -2,15 +2,20 @@ package com.webcode.team.application.greenmovebackend.iam.application.internal.c
 
 
 import com.webcode.team.application.greenmovebackend.iam.application.internal.outboundservices.hashing.HashingService;
+import com.webcode.team.application.greenmovebackend.iam.application.internal.outboundservices.memberships.ExternalMembershipService;
 import com.webcode.team.application.greenmovebackend.iam.application.internal.outboundservices.owners.ExternalOwnerService;
+import com.webcode.team.application.greenmovebackend.iam.application.internal.outboundservices.tenants.ExternalTenantService;
 import com.webcode.team.application.greenmovebackend.iam.application.internal.outboundservices.tokens.TokenService;
 import com.webcode.team.application.greenmovebackend.iam.domain.model.aggregates.User;
 import com.webcode.team.application.greenmovebackend.iam.domain.model.commands.CreateUserOwnerCommand;
+import com.webcode.team.application.greenmovebackend.iam.domain.model.commands.CreateUserTenantCommand;
 import com.webcode.team.application.greenmovebackend.iam.domain.model.commands.SignInCommand;
 import com.webcode.team.application.greenmovebackend.iam.domain.model.commands.SignUpCommand;
 import com.webcode.team.application.greenmovebackend.iam.domain.services.UserCommandService;
 import com.webcode.team.application.greenmovebackend.iam.infrastructure.persistence.jpa.repositories.RoleRepository;
 import com.webcode.team.application.greenmovebackend.iam.infrastructure.persistence.jpa.repositories.UserRepository;
+import com.webcode.team.application.greenmovebackend.membershipManagement.interfaces.rest.resources.CreateMembershipResource;
+import com.webcode.team.application.greenmovebackend.membershipManagement.interfaces.rest.transform.CreateMembershipCommandFromResourceAssembler;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.stereotype.Service;
 
@@ -32,15 +37,19 @@ public class UserCommandServiceImpl implements UserCommandService {
   private final RoleRepository roleRepository;
 
   private final ExternalOwnerService externalOwnerService;
+  private final ExternalTenantService externalTenantService;
+  private final ExternalMembershipService externalMembershipService;
 
   public UserCommandServiceImpl(UserRepository userRepository, HashingService hashingService,
-                                TokenService tokenService, RoleRepository roleRepository, ExternalOwnerService externalOwnerService) {
+                                TokenService tokenService, RoleRepository roleRepository, ExternalOwnerService externalOwnerService, ExternalTenantService externalTenantService, ExternalMembershipService externalMembershipService) {
 
     this.userRepository = userRepository;
     this.hashingService = hashingService;
     this.tokenService = tokenService;
     this.roleRepository = roleRepository;
     this.externalOwnerService = externalOwnerService;
+    this.externalTenantService = externalTenantService;
+    this.externalMembershipService = externalMembershipService;
   }
 
   /**
@@ -100,6 +109,25 @@ public class UserCommandServiceImpl implements UserCommandService {
       return Optional.of(updatedUser);
     } catch (Exception e) {
       throw new RuntimeException("Error setting user as owner");
+    }
+  }
+
+  @Override
+  public Optional<User> handle(CreateUserTenantCommand command) {
+    var userId = command.userId();
+    if (userRepository.findById(userId).isEmpty()) {
+      throw new RuntimeException("User not found");
+    }
+    var user = userRepository.findById(userId).get();
+    var tenant = externalTenantService.createUserTenant(command);
+    var createMembershipCommand = CreateMembershipCommandFromResourceAssembler.toCommandFromResource(new CreateMembershipResource("DEFAULT"), tenant.get().getId());
+    this.externalMembershipService.createMembership(createMembershipCommand);
+    user.setTenant(tenant.get());
+    try {
+      var updatedUser = this.userRepository.save(user);
+      return Optional.of(updatedUser);
+    } catch (Exception e) {
+      throw new RuntimeException("Error setting user as tenant");
     }
   }
 }

@@ -2,6 +2,7 @@ package com.webcode.team.application.greenmovebackend.iam.domain.services;
 
 import com.webcode.team.application.greenmovebackend.iam.domain.model.aggregates.User;
 import com.webcode.team.application.greenmovebackend.iam.domain.model.commands.CreateUserOwnerCommand;
+import com.webcode.team.application.greenmovebackend.iam.domain.model.commands.CreateUserTenantCommand;
 import com.webcode.team.application.greenmovebackend.iam.domain.model.commands.SignInCommand;
 import com.webcode.team.application.greenmovebackend.iam.domain.model.commands.SignUpCommand;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -24,5 +25,19 @@ public interface UserCommandService {
    */
   Optional<User> handle(SignUpCommand command);
 
+  /**
+   * Handle create user owner command
+   * This method handles the create user owner command and returns the user
+   * @param command
+   * @return user
+   */
   Optional<User> handle(CreateUserOwnerCommand command);
+
+  /**
+   * Handle create user tenant command
+   * This method handles the create user tenant command and returns the user
+   * @param command
+   * @return user
+   */
+  Optional<User> handle(CreateUserTenantCommand command);
 }
