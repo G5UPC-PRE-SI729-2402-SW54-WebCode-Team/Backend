@@ -16,6 +16,7 @@ public record CreateVehicleCommand(
         String name,
         String latitude,
         String longitude,
+        String speed,
         String urlImage,
         String type,
         Long ownerId

@@ -9,6 +9,7 @@ public class CreateVehicleCommandFromResourceAssembler {
                 resource.name(),
                 resource.latitude(),
                 resource.longitude(),
+                resource.speed(),
                 resource.urlImage(),
                 resource.type(),
                 ownerId

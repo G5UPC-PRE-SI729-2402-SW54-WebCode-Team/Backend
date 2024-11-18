@@ -7,6 +7,7 @@ public record ReservationVehicleResource(
         String status,
         String type,
         String longitude,
-        String latitude
+        String latitude,
+        String speed
 ) {
 }

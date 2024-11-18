@@ -20,6 +20,7 @@ import lombok.Setter;
 public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
     private String name;
     private String urlImage;
+    private String speed;
     private String latitude;
     private String longitude;
     @Enumerated(EnumType.STRING)
@@ -40,6 +41,7 @@ public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
         this.name = command.name();
         this.latitude = command.latitude();
         this.longitude = command.longitude();
+        this.speed = command.speed();
         this.urlImage = command.urlImage();
         this.status = VehicleStatus.AVAILABLE;
         this.type = VehicleType.valueOf(command.type().toUpperCase());

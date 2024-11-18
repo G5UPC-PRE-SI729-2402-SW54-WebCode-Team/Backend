@@ -10,6 +10,7 @@ public class VehicleResourceFromEntityAssembler {
                 vehicle.getName(),
                 vehicle.getLatitude(),
                 vehicle.getLongitude(),
+                vehicle.getSpeed(),
                 vehicle.getUrlImage(),
                 vehicle.getStatus().name(),
                 vehicle.getType().name(),

@@ -5,6 +5,7 @@ public record VehicleResource(
         String name,
         String latitude,
         String longitude,
+        String speed,
         String urlImage,
         String status,
         String type,
