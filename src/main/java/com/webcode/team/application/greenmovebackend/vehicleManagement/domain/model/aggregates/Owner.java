@@ -55,6 +55,15 @@ public class Owner extends AuditableAbstractAggregateRoot<Owner> {
         this.rating = 0.0f;
     }
 
+    public Owner(String firstName, String lastName, String urlImage, String phone, String street, String number, String city, String postalCode, String country) {
+        this.name = new PersonName(firstName, lastName);
+        this.urlImage = urlImage;
+        this.phone = phone;
+        this.address = new StreetAddress(street, number, city, postalCode, country);
+        this.rating = 0.0f;
+
+    }
+
     public String getFullName() {
         return name.getFullName();
     }
