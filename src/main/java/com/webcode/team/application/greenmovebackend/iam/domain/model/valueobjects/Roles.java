@@ -5,5 +5,4 @@ public enum Roles {
   ROLE_ADMIN,
   ROLE_TENANT,
   ROLE_OWNER,
-
 }
