@@ -42,6 +42,16 @@ public class Tenant extends AuditableAbstractAggregateRoot<Tenant> {
         this.phone = command.phone();
     }
 
+    public Tenant (String firstName, String lastName, String urlImage, String phone){
+        this.name = new PersonName(firstName, lastName);
+        this.urlImage = urlImage;
+        this.phone = phone;
+    }
+
+    public String getFullName() {
+        return name.getFullName();
+    }
+
     public String getReservationTime() {
         return switch (this.membership.getType()) {
             case DEFAULT -> "4";
