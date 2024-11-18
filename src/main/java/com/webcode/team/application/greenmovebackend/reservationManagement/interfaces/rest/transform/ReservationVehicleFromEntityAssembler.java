@@ -10,7 +10,9 @@ public class ReservationVehicleFromEntityAssembler {
                 vehicle.getName(),
                 vehicle.getUrlImage(),
                 vehicle.getStatus().name(),
-                vehicle.getType().name()
+                vehicle.getType().name(),
+                vehicle.getLongitude(),
+                vehicle.getLatitude()
         );
     }
 }

@@ -5,6 +5,8 @@ public record ReservationVehicleResource(
         String name,
         String urlImage,
         String status,
-        String type
+        String type,
+        String longitude,
+        String latitude
 ) {
 }
