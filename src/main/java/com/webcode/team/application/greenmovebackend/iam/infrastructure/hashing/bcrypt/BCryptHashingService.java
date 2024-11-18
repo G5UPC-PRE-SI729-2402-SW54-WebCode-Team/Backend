@@ -1,6 +1,7 @@
 package com.webcode.team.application.greenmovebackend.iam.infrastructure.hashing.bcrypt;
 
 import com.webcode.team.application.greenmovebackend.iam.application.internal.outboundservices.hashing.HashingService;
+import com.webcode.team.application.greenmovebackend.iam.infrastructure.hashing.bcrypt.services.HashingServiceImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
