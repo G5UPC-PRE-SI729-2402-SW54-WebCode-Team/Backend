@@ -1,7 +1,10 @@
 package com.webcode.team.application.greenmovebackend.iam.domain.model.aggregates;
 
 import com.webcode.team.application.greenmovebackend.iam.domain.model.entities.Role;
+import com.webcode.team.application.greenmovebackend.membershipManagement.domain.model.aggregates.Tenant;
 import com.webcode.team.application.greenmovebackend.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
+import com.webcode.team.application.greenmovebackend.vehicleManagement.domain.model.aggregates.Owner;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -37,6 +40,16 @@ public class User extends AuditableAbstractAggregateRoot<User> {
       joinColumns = @JoinColumn(name = "user_id"),
       inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles;
+  @Nullable
+  @Setter
+  @ManyToOne
+  @JoinColumn(name = "owner_id")
+  private Owner owner;
+  @Nullable
+  @Setter
+  @ManyToOne
+  @JoinColumn(name = "tenant_id")
+  private Tenant tenant;
 
   public User() {
     this.roles = new HashSet<>();
